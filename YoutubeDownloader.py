@@ -107,17 +107,3 @@ def MakeDownloadsAudios():
 Apresentacao()
 
 
-'''
-
-yt = [15];
-
-#guarda os downloads não realizado para tentar novamente depois...
-nrealizado = [];
-
-yt.append(YouTube(r'https://www.youtube.com/watch?v=eWn_4DnUj4g&ab_channel=BassNation'))
-
-print(yt[-1].title);
-
-
-'''
-
