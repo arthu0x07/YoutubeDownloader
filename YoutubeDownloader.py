@@ -1,9 +1,11 @@
-from os import link
+import os;
 from pytube import YouTube;
 import time;
+from moviepy.editor import *;
 
 
 linksArray = [];
+Paths = [];
 
 
 def Apresentacao():
@@ -75,6 +77,7 @@ def ReceiveLinks(comparate = None):
         actualLink = actualLink.upper();
         Saltos();
 
+    Saltos(100);
     print("Seus links até agora são estes: ");
     for i in range(0, len(linksArray)):
         print("Link: " + linksArray[i] + " | " + YouTube(linksArray[i]).title);
@@ -91,19 +94,48 @@ def ReceiveLinks(comparate = None):
 
 def MakeDownloadsAudios():
     global linksArray;
-    rangeReached = False;
 
-    while(rangeReached == False):
+    for i in range(0, len(linksArray)):
+        yt = YouTube(linksArray[i]);
+        stream = yt.streams.filter(progressive=True).first();
+        stream.download(output_path=str('musics/'), max_retries=3);
 
-        for i in range(0, len(linksArray)):
-            yt = YouTube(linksArray[i]);
-            stream = yt.streams.filter(only_audio=True).first();
-            stream.download(max_retries=3);
+        time.sleep(5);
+
+    Converting();
+
+
+
+def Converting():
+    Saltos()
+    Range = False;
+
+    print("Agora vamos converter...")
+
+    pasta = './musics'
     
+    for root, dirs, files in os.walk("./Musics", topdown=False):
+        for name in files:
+            diretorio = os.path.join(root, name)
+
+            mp4_file = str(diretorio);
+            caminhomp3 = diretorio.replace(".mp4", ".mp3");
+            mp3_file = str(caminhomp3);
+            
+            VideoClip = VideoFileClip(mp4_file)
+            AudioClip = VideoClip.audio;
+            AudioClip.write_audiofile(mp3_file)
+            AudioClip.close;
+            VideoClip.close;
 
 
-# >> Área do programa...
+Apresentacao();
 
-Apresentacao()
+
+#Fazer uma checagem pra ver se o arquivo possue a extenção .mp3 (para ignorar tal arquivo)...
+
+#Fazer uma forma de mostrar quais downloads estão sendo executados...
+
+#Reescrever a leitura de diretorios antes de commitar...
 
 
