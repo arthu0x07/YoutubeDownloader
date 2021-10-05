@@ -1,6 +1,7 @@
 import os;
 from pytube import YouTube;
 import time;
+import re;
 from moviepy.editor import *;
 
 
@@ -15,8 +16,6 @@ def Apresentacao():
     Saltos(1);
 
     print(" >> Fazer Download de músicas                         : (1) ");
-    print(" >> Fazer Download de vídeos                          : (2) ");
-    print(" >> Checar Informações sobre política de distribuição : (3) ");
 
     choice = input()
 
@@ -97,7 +96,7 @@ def MakeDownloadsAudios():
 
     for i in range(0, len(linksArray)):
         yt = YouTube(linksArray[i]);
-        stream = yt.streams.filter(progressive=True).first();
+        stream = yt.streams.filter(progressive=False).first();
         stream.download(output_path=str('musics/'), max_retries=3);
 
         time.sleep(5);
@@ -119,7 +118,8 @@ def Converting():
             diretorio = os.path.join(root, name)
 
             mp4_file = str(diretorio);
-            caminhomp3 = diretorio.replace(".mp4", ".mp3");
+            #erro nesta linha, extensao errada (do arquivo e )
+            caminhomp3 = re.sub(r'.3gpp|.mp4|.wav|.avi|.FLV|.MOV|.MKV|,', '.mp3', diretorio);
             mp3_file = str(caminhomp3);
             
             VideoClip = VideoFileClip(mp4_file)
